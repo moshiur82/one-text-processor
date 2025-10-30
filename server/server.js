@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path'); // <-- এটা যোগ করো
 require('dotenv').config();
 
 const app = express();
@@ -8,7 +9,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('../public'));
+
+// public/ ফোল্ডার সার্ভ করো
+app.use(express.static(path.join(__dirname, '../public')));
 
 // MongoDB কানেকশন
 mongoose.connect(process.env.MONGODB_URI)
@@ -25,14 +28,14 @@ const Submission = mongoose.model('Submission', submissionSchema);
 
 // হোম রুট
 app.get('/', (req, res) => {
-  res.sendFile('index.html', { root: '../public' });
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 // API: প্রসেস
 app.post('/api/process', async (req, res) => {
   const { text } = req.body;
   if (!text?.trim()) return res.status(400).json({ error: 'টেক্সট দাও!' });
-
+  
   const result = {
     length: text.length,
     words: text.split(/\s+/).filter(w => w).length,
