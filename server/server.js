@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// public/ ফোল্ডার সার্ভ করো
+// public ফোল্ডার সার্ভ করো
 app.use(express.static(path.join(__dirname, '../public')));
 
 // MongoDB কানেকশন
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 app.post('/api/process', async (req, res) => {
   const { text } = req.body;
   if (!text?.trim()) return res.status(400).json({ error: 'টেক্সট দাও!' });
-  
+
   const result = {
     length: text.length,
     words: text.split(/\s+/).filter(w => w).length,
